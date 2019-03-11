@@ -1,1 +1,1 @@
-# elte-nummod2
+Nummód2 beadandók

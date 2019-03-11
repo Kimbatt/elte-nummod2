@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>Lagrange</title>
+
+<style>
+body
+{
+    background: #323639;
+    color: white;
+    margin: 0px;
+    padding: 0px;
+}
+
+input[type=number]
+{
+    font-size: 20px;
+    margin: 2px;
+    width: 60px;
+    display: inline-block;
+    text-align: right;
+
+    -moz-appearance: textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button
+{
+    -webkit-appearance: none;
+}
+
+input[type=number]:invalid
+{
+    background: #ff2020;
+    color: white;
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="graph" style="z-index: 0;"></canvas>
+<canvas id="coord-overlay" style="position: absolute; top: 0px; left: 0px; z-index: 1;"></canvas>
+<div id="stuff" style="font-size: 20px; margin: 10px;">
+    <div id="error-text" style="font-size: 20px; color: #ff0000; margin-bottom: 10px; visibility: hidden;">&nbsp;</div>
+    <div>
+        <div style="display: inline-block; width: 180px;">Y értékek:</div>
+        <div id="y-coords" style="display: inline-block;"></div>
+    </div>
+    <div>
+        <div style="display: inline-block; width: 180px;">X koordináták:</div>
+        <div id="x-coords" style="display: inline-block;"></div>
+    </div>
+</div>
+<script src="lagrange.js"></script>
+</body>
+</html>
