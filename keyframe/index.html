@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>Keyframe animation</title>
+
+<style>
+body
+{
+    background: #323639;
+    color: white;
+    margin: 8px;
+}
+
+textarea
+{
+    font-size: 20px;
+    resize: none;
+    width: 30vw;
+    height: calc(100vh - 32px);
+}
+
+button
+{
+    background-color: #146dff;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    padding: 10px 15px 10px 15px;
+    font-family: "Verdana";
+    font-size: 24px;
+    cursor: pointer;
+    transition: 0.15s;
+    outline: none;
+}
+
+button:hover
+{
+    background-color: #54adff;
+    cursor: pointer;
+}
+
+
+</style>
+</head>
+<body>
+<textarea id="input">0 50 50 0 1
+100 40 10 100 1.5
+150 80 20 45 2
+180 10 60 720 0.1</textarea>
+<button id="start-button" style="position: absolute; left: 10px; bottom: 20px;" onclick="Start()">Start</button>
+<canvas id="animation"></canvas>
+<script src="keyframe.js"></script>
+</body>
+</html>
