@@ -29,18 +29,31 @@ window.addEventListener("load", function()
 });
 window.addEventListener("resize", Resized);
 
-let zoom = 40;
+let zoomX = 40, zoomY = 40;
 window.addEventListener("wheel", function(event)
 {
-    let prevZoom = zoom;
+    console.log(event);
+    let prevZoomX = zoomX, prevZoomY = zoomY;
     if (event.deltaY < 0)
-        zoom *= 1.1;
+    {
+        if (!event.shiftKey)
+            zoomX *= 1.1;
+        
+        if (!event.altKey)
+            zoomY *= 1.1;
+    }
     else
-        zoom /= 1.1;
+    {
+        if (!event.shiftKey)
+            zoomX /= 1.1;
+        
+        if (!event.altKey)
+            zoomY /= 1.1;
+    }
 
     const x = event.clientX, y = event.clientY - canvas.height * 0.5;
-    cameraOffsetX = x - (x - cameraOffsetX) / prevZoom * zoom;
-    cameraOffsetY = y - (y - cameraOffsetY) / prevZoom * zoom;
+    cameraOffsetX = x - (x - cameraOffsetX) / prevZoomX * zoomX;
+    cameraOffsetY = y - (y - cameraOffsetY) / prevZoomY * zoomY;
     Calculate();
 });
 
@@ -74,7 +87,7 @@ canvas2.addEventListener("mousemove", function(event)
     {
         mousePosX = event.clientX;
         mousePosY = event.clientY;
-        mouseCoordX = (mousePosX - cameraOffsetX) / zoom;
+        mouseCoordX = (mousePosX - cameraOffsetX) / zoomX;
         mouseCoordY = polynomialFunction(mouseCoordX);
         DrawCoords();
     }
@@ -247,7 +260,7 @@ function DrawCoords()
     ctx2.fillText("Y: " + mouseCoordY.toFixed(2), mousePosX + 10, mousePosY - 50);
 
     let zero = canvas2.height * 0.5 + cameraOffsetY;
-    let value = zero - mouseCoordY * zoom;
+    let value = zero - mouseCoordY * zoomY;
     let xZero = cameraOffsetX;
     
     ctx2.beginPath();
@@ -283,8 +296,8 @@ function Draw()
 
     for (let i = 0; i < width; i += precision)
     {
-        let x = (i - cameraOffsetX) / zoom;
-        ctx.fillRect(i - size, height - polynomialFunction(x) * zoom + cameraOffsetY - size, size * 2, size * 2);
+        let x = (i - cameraOffsetX) / zoomX;
+        ctx.fillRect(i - size, height - polynomialFunction(x) * zoomY + cameraOffsetY - size, size * 2, size * 2);
     }
 
     if (mouseCoordX !== undefined && mouseCoordY !== undefined)
