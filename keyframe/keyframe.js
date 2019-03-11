@@ -1,3 +1,4 @@
+// canvas objektum amire kirajzoljuk a téglalapot
 const canvas = document.getElementById("animation");
 const ctx = canvas.getContext("2d");
 
@@ -16,14 +17,22 @@ window.addEventListener("load", function()
 });
 window.addEventListener("resize", Resized);
 
+// a és b közötti lineáris interpoláció
 function Lerp(a, b, percent)
 {
     return a + (b - a) * percent;
 }
 
+// melyik kulcskockánál járunk
 let currentAnimationIndex = 0;
+
+// hányadik képkockánál járunk
 let currentFrame = 0;
+
+// a kirajzolt téglalap mérete (hány százaléka a canvas magasságának)
 const rectangleWidth = 20, rectangleHeight = 10;
+
+// ez a függvény hívódik meg minden egyes képkocka kirajzolásánál
 function Animate()
 {
     if (!running)
@@ -31,13 +40,14 @@ function Animate()
 
     let currentFrameData = frameData[currentAnimationIndex];
     let nextFrameData = frameData[currentAnimationIndex + 1];
-    
+
+    // ha elértük az utolsó képkockát a jelenlegi kulcskockában
     if (nextFrameData.frame === currentFrame)
     {
         currentFrameData = nextFrameData;
         ++currentAnimationIndex;
 
-        if (currentAnimationIndex === frameData.length - 1)
+        if (currentAnimationIndex === frameData.length - 1) // véget ért az animáció
         {
             document.getElementById("start-button").innerHTML = "Start";
             running = false;
@@ -46,10 +56,14 @@ function Animate()
 
         nextFrameData = frameData[currentAnimationIndex + 1];
     }
-    
+
+    // hány képkockára vannak egymástól a kulcskockák
     let frameDistance = nextFrameData.frame - currentFrameData.frame;
+
+    // hány százalékánál járunk a jelenlegi kulcskockának
     let percent = (currentFrame - currentFrameData.frame) / frameDistance;
 
+    // interpolált értékek
     let currentPosX = Lerp(currentFrameData.posX, nextFrameData.posX, percent) / 100 * canvas.width;
     let currentPosY = Lerp(currentFrameData.posY, nextFrameData.posY, percent) / 100 * canvas.height;
     let currentRotation = Lerp(currentFrameData.rotation, nextFrameData.rotation, percent) / 180 * Math.PI;
@@ -58,6 +72,7 @@ function Animate()
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // kirajzolás
     let width = rectangleWidth / 100 * canvas.height, height = rectangleHeight / 100 * canvas.height;
     ctx.fillStyle = "#00ffff";
     ctx.save();
@@ -72,8 +87,13 @@ function Animate()
     ++currentFrame;
 }
 
+// ez a segédváltozó tárolja azt, hogy éppen fut-e az animáció
 let running = false;
+
+// ez az objektum tárolja az egyes kulcskockák adatait
 let frameData;
+
+// ez a függvény indítja el az animációt
 function Start()
 {
     running = !running;
@@ -110,6 +130,7 @@ function Start()
 
             if (!error)
             {
+                // a kulcskocka helyes, hozzáadjuk a listához
                 lastFrameTime = frame;
                 let currentFrameData =
                 {
@@ -124,6 +145,7 @@ function Start()
             }
         }
 
+        // hiba esetén jelezzük
         if (error)
         {
             running = false;

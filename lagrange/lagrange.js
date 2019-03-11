@@ -1,6 +1,8 @@
+// ez a fő canvas, erre van rajzolva maga a függvény
 const canvas = document.getElementById("graph");
 const ctx = canvas.getContext("2d");
 
+// ez a másodlagos canvas, erre van rajzolva a szöveg és a tengelyekhez tartozó vonalak
 const canvas2 = document.getElementById("coord-overlay");
 const ctx2 = canvas2.getContext("2d");
 
@@ -8,6 +10,7 @@ const stuffDiv = document.getElementById("stuff");
 
 function Resized()
 {
+    // az ablak átméretezésénél a canvasokat is átméretezzük
     canvas.width = document.documentElement.clientWidth;
     canvas.height = document.documentElement.clientHeight - stuffDiv.clientHeight - 24;
     
@@ -32,7 +35,7 @@ window.addEventListener("resize", Resized);
 let zoomX = 40, zoomY = 40;
 window.addEventListener("wheel", function(event)
 {
-    console.log(event);
+    // egérgörgővel nagyítás / kicsinyítés
     let prevZoomX = zoomX, prevZoomY = zoomY;
     if (event.deltaY < 0)
     {
@@ -51,13 +54,17 @@ window.addEventListener("wheel", function(event)
             zoomY /= 1.1;
     }
 
+    // ennek a kódrészletnek az a feladata, hogy nagyításnál az egér pozíciójára nagyítsunk
     const x = event.clientX, y = event.clientY - canvas.height * 0.5;
     cameraOffsetX = x - (x - cameraOffsetX) / prevZoomX * zoomX;
     cameraOffsetY = y - (y - cameraOffsetY) / prevZoomY * zoomY;
     Calculate();
 });
 
+// segédváltozó, akkor igaz ha mozgatjuk a kamerát
 let mouseDown = false;
+
+// a kamera pozícióját tároló változók
 let cameraOffsetX = 0, cameraOffsetY = 0;
 canvas2.addEventListener("mousedown", function(event)
 {
@@ -73,6 +80,7 @@ canvas2.addEventListener("mousemove", function(event)
 {
     if (mouseDown)
     {
+        // kamera mozgatása, ha le van nyomva a bal egérgomb
         cameraOffsetX += event.movementX;
         cameraOffsetY += event.movementY;
         mouseCoordX = undefined;
@@ -85,6 +93,7 @@ canvas2.addEventListener("mousemove", function(event)
     }
     else
     {
+        // koordináták kiszámolása, ha nincs lenyomva
         mousePosX = event.clientX;
         mousePosY = event.clientY;
         mouseCoordX = (mousePosX - cameraOffsetX) / zoomX;
@@ -100,6 +109,7 @@ canvas2.addEventListener("mouseleave", function()
     ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
 });
 
+// ez a függvény hozzáad új mezőket amibe be lehet írni az X és Y koordinátákat
 function AddInput(x, y)
 {
     let xCoordsDiv = document.getElementById("x-coords");
@@ -120,6 +130,7 @@ function AddInput(x, y)
     yCoordsDiv.appendChild(yInput);
 }
 
+// az oldal betöltésekor fut le ez a függvény, előkészíti a dolgokat
 function Setup()
 {
     cameraOffsetX = document.documentElement.clientWidth * 0.25;
@@ -132,6 +143,7 @@ function Setup()
 }
 
 let error = false;
+// ez a függvény ellenőrzi le, hogy a beírt adatok érvényesek-e
 function InputChanged()
 {
     let xCoordsDiv = document.getElementById("x-coords").children;
@@ -142,6 +154,7 @@ function InputChanged()
     let emptyColumnCount = 0;
     let deleteThisNodeX = undefined, deleteThisNodeY = undefined;
 
+    // eltároljuk az X helyeket, ha egy hely többször szerepel, akkor hibát jelzünk
     let xValues = new Set();
     for (let i = 0; i < xCoordsDiv.length; ++i)
     {
@@ -172,6 +185,7 @@ function InputChanged()
 
         if (xElement.validity.valid && xElement.value === "" && yElement.validity.valid && yElement.value === "")
         {
+            // ha 2 üres mező is van, akkor az egyiket töröljük
             if (++emptyColumnCount === 2)
             {
                 deleteThisNodeX = xElement;
@@ -186,6 +200,7 @@ function InputChanged()
     if (error)
         return;
 
+    // ha kell, akkor új mezőt adunk hozzá
     if (!hasEmptyOrInvalidInput && emptyColumnCount === 0)
         AddInput();
     else
@@ -198,11 +213,15 @@ function InputChanged()
     }
 
     document.getElementById("error-text").style.visibility = "hidden";
+
+    // ha minden helyes, akkor kiszámolhatjuk a polinomot
     Calculate();
 }
 
+// ez lesz az a függvény, ami adott X pontban megadja a polinom helyettesítési értékét
 let polynomialFunction;
 
+// ez a függvény kiszámolja a dolgokat
 function Calculate()
 {
     if (error)
@@ -230,6 +249,7 @@ function Calculate()
 
     polynomialFunction = function(x)
     {
+        // itt történik az interpolációs polinom kiszámítása
         let value = 0;
         for (let i = 0; i < count; ++i)
         {
@@ -253,6 +273,7 @@ function Calculate()
     Draw();
 }
 
+// ez a függvény rajzolja ki a koordinátákat és a tengelyekhez a vonalakat
 function DrawCoords()
 {
     ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
@@ -272,6 +293,8 @@ function DrawCoords()
 }
 
 let mouseCoordX, mouseCoordY, mousePosX, mousePosY;
+
+// ez a függvény rajzolja ki a polinomot
 function Draw()
 {
     const width = canvas.width;
@@ -291,7 +314,10 @@ function Draw()
 
     ctx.fillStyle = "red";
 
+    // az egyes kirajzolt pontok mérete
     const size = 2;
+
+    // ha ezt a változót kisebbre vesszük, akkor növelhető a pontossága a kirajzolásnak
     const precision = 1;
 
     for (let i = 0; i < width; i += precision)
