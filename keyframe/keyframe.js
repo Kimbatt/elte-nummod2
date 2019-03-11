@@ -76,7 +76,7 @@ function Animate()
     let width = rectangleWidth / 100 * canvas.height, height = rectangleHeight / 100 * canvas.height;
     ctx.fillStyle = "#00ffff";
     ctx.save();
-    let offsetX = currentPosX + width * 0.5, offsetY = currentPosY + height * 0.5;
+    let offsetX = currentPosX + width * 0.5 * currentScale, offsetY = currentPosY + height * 0.5 * currentScale;
     ctx.translate(offsetX, offsetY);
     ctx.rotate(currentRotation);
     ctx.translate(-offsetX, -offsetY);
