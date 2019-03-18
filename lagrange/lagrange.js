@@ -221,14 +221,17 @@ function InputChanged()
 // ez lesz az a függvény, ami adott X pontban megadja a polinom helyettesítési értékét
 let polynomialFunction;
 
+// ezekben a tömbökben lesznek tárolva a megadott pontok
+let xCoords, yCoords;
+
 // ez a függvény kiszámolja a dolgokat
 function Calculate()
 {
     if (error)
         return;
 
-    let xCoords = [];
-    let yCoords = [];
+    xCoords = [];
+    yCoords = [];
 
     let xCoordsDiv = document.getElementById("x-coords").children;
     let yCoordsDiv = document.getElementById("y-coords").children;
@@ -324,6 +327,14 @@ function Draw()
     {
         let x = (i - cameraOffsetX) / zoomX;
         ctx.fillRect(i - size, height - polynomialFunction(x) * zoomY + cameraOffsetY - size, size * 2, size * 2);
+    }
+
+    ctx.fillStyle = "cyan";
+    for (let i = 0; i < xCoords.length; ++i)
+    {
+        ctx.beginPath();
+        ctx.arc(xCoords[i] * zoomX + cameraOffsetX, height -yCoords[i] * zoomY + cameraOffsetY, size * 2, 0, Math.PI * 2);
+        ctx.fill();
     }
 
     if (mouseCoordX !== undefined && mouseCoordY !== undefined)
