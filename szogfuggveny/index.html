@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>Szögfüggvény</title>
+
+<style>
+body
+{
+    background: #323639;
+    color: white;
+    padding: 0px;
+    margin: 20px;
+    font-size: 4vh;
+}
+
+input[type=number]
+{
+    font-size: 4vh;
+    margin: 2px;
+    width: 300px;
+    display: inline-block;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button
+{
+    -webkit-appearance: none;
+}
+
+input[type=number]:invalid
+{
+    background: #ff2020;
+    color: white;
+}
+
+.padding-div
+{
+    padding: 4px 10px;
+    border: 4px solid black;
+}
+
+td:nth-child(n+2)
+{
+    width: 55vh;
+}
+
+</style>
+</head>
+<body>
+
+<div id="stuff" style="margin: 10px; font-family: Consolas, Courier, monospace;">
+    <label style="display: block; margin-bottom: 20px;">X: <input type="number" id="input" value="0" step="any" oninput="Changed(this)"></label>
+    <table style="border: 4px solid black; border-collapse: collapse;">
+        <tr>
+            <td class="padding-div"></td>
+            <td class="padding-div">cos(x)</td>
+            <td class="padding-div">sin(x)</td>
+        </tr>
+        <tr>
+            <td class="padding-div">Közelítő érték</td>
+            <td class="padding-div" id="cos">1</td>
+            <td class="padding-div" id="sin">0</td>
+        </tr>
+        <tr>
+            <td class="padding-div">Tényleges érték</td>
+            <td class="padding-div" id="cos-actual">1</td>
+            <td class="padding-div" id="sin-actual">0</td>
+        </tr>
+        <tr>
+            <td class="padding-div">Közelítés hibája</td>
+            <td class="padding-div" id="cos-error">0</td>
+            <td class="padding-div" id="sin-error">0</td>
+        </tr>
+    </table>
+</div>
+<script src="szogfuggveny.js"></script>
+</body>
+</html>
