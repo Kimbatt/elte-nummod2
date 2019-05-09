@@ -255,30 +255,30 @@ function AddNewPoint()
     Draw();
     DrawCoords();
 
+    volume = 0;
+    area = 0;
     if (xCoords.length > 1)
     {
-        volume = 0;
-        area = 0;
         for (let i = 1; i < xCoords.length; ++i)
         {
             const prevX = xCoords[i - 1], prevY = yCoords[i - 1], currentX = xCoords[i], currentY = yCoords[i];
 
             // trapéz területe
-            const currentArea = (prevY + currentY) * (currentX - prevX) * 0.5;
-            volume += currentArea * currentArea;
+            volume += (prevY * prevY + currentY * currentY) * (currentX - prevX) * 0.5;
 
-            area += Math.sqrt((currentX - prevX) * (currentX - prevX) + (currentY - prevY) * (currentY - prevY));
+            const derivative = (currentY - prevY) / (currentX - prevX);
+            area += Math.sqrt(1 + derivative * derivative) * (currentX - prevX);
         }
 
         volume *= Math.PI;
         area *= Math.PI * 2;
-
-        // a pohár aljának a felszíne
-        area += yCoords[0] * yCoords[0] * Math.PI;
-
-        document.getElementById("volume-div").innerText = "Térfogat: " + volume.toFixed(2) + " egység³";
-        document.getElementById("area-div").innerText = "Felszín: " + area.toFixed(2) + " egység²";
     }
+
+    // a pohár aljának a felszíne
+    area += yCoords[0] * yCoords[0] * Math.PI;
+
+    document.getElementById("volume-div").innerText = "Térfogat: " + volume.toFixed(2) + " egység³";
+    document.getElementById("area-div").innerText = "Felszín: " + area.toFixed(2) + " egység²";
     
     // webgl 3d rajzolás rész
 
