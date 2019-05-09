@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>Forgástest</title>
+
+<style>
+body
+{
+    background: #323639;
+    color: white;
+    margin: 0px;
+    padding: 0px;
+}
+
+#reset-button
+{
+    border: none;
+    background: white;
+    color: black;
+    border-radius: 4px;
+    font-size: 24px;
+    outline: none;
+    margin: 0px 0px 0px 8px;
+}
+
+#reset-button:hover
+{
+    background: #d3feff;;
+}
+
+#reset-button:active
+{
+    background: #aed4d4;;
+}
+
+#volume-div,#area-div
+{
+    margin: 8px;
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="graph" style="z-index: 0; display: block;"></canvas>
+<canvas id="coord-overlay" style="position: absolute; top: 0px; left: 0px; z-index: 1; display: block;"></canvas>
+<canvas id="3d-view" style="position: absolute; top: 0px; right: 0px; display: block;"></canvas>
+<div id="stuff" style="font-size: 20px; margin: 10px;">
+    <button id="reset-button" onclick="Reset()">Reset</button>
+    <div id="volume-div"></div>
+    <div id="area-div"></div>
+</div>
+<script src="main.js"></script>
+</body>
+</html>
